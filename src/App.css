@@ -185,7 +185,7 @@ button:hover,
 
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 Cards in a row */
+  grid-template-columns: repeat(3, 1fr);
   gap: 30px;
 }
 
@@ -203,13 +203,6 @@ button:hover,
   height: 220px;
   object-fit: cover;
   display: block;
-}
-
-.card-img-placeholder {
-  height: 200px;
-  background-color: #ccc;
-  background-size: cover;
-  background-position: center;
 }
 
 .card-content {
@@ -247,7 +240,79 @@ button:hover,
   margin-top: auto; /* Pushes link to bottom */
 }
 
-/* --- 6. Footer --- */
+/* --- 6. Testimonials Section  --- */
+.testimonials {
+  background-color: #495e57; /* Primary Green */
+  padding: 100px 0;
+  color: #ffffff;
+}
+
+.testimonials-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.testimonials-header h3 {
+  font-family: "Markazi Text", serif;
+  font-size: 56px;
+  color: #f4ce14; /* Primary Yellow */
+  margin: 0;
+}
+
+/* The Grid - Forces 4 columns on desktop */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 Equal Columns */
+  gap: 20px;
+}
+
+/* Individual Card Styling */
+.testimonial-card {
+  background-color: #ffffff;
+  color: #333333;
+  padding: 25px;
+  border-radius: 16px; /* Rounded corners */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Star Ratings */
+.rating {
+  color: #ee9972; /* Secondary Orange/Peach color */
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* User Profile (Image + Name) */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-img {
+  width: 60px;
+  height: 60px;
+  background-color: #ccc; /* Placeholder gray */
+  border-radius: 50%; /* Makes it a circle */
+  object-fit: cover;
+}
+
+.user-name {
+  font-weight: 800;
+  font-family: "Karla", sans-serif;
+  font-size: 18px;
+}
+
+/* Review Text */
+.review-text {
+  font-size: 16px;
+  line-height: 1.4;
+  color: #495e57;
+}
+
+/* --- 7. Footer --- */
 footer {
   background-color: var(--primary-green);
   padding: 60px 0;
@@ -281,7 +346,58 @@ footer {
   margin-bottom: 10px;
 }
 
-/* --- Mobile Responsiveness --- */
+/* --- 8. About Section --- */
+.about {
+  padding: 100px 0;
+}
+
+.about-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.about-text h1 {
+  font-family: var(--font-display);
+  color: var(--primary-yellow);
+  font-size: 64px;
+  line-height: 1;
+  margin-bottom: 0;
+}
+
+.about-text h2 {
+  color: var(--primary-green);
+  font-size: 40px;
+  margin-top: 0;
+  font-weight: 400;
+}
+
+.about-images {
+  position: relative;
+  height: 400px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.img-box {
+  width: 250px;
+  height: 175px;
+  background-color: #333;
+  position: relative;
+}
+
+.img-box.overlay {
+  background-color: #ccc;
+  top: -40px;
+  right: 20px;
+  z-index: 1;
+}
+
+/* --- 9. Mobile Responsiveness --- */
+/* This only runs on screens SMALLER than 768px */
 @media (max-width: 768px) {
   .nav-container {
     flex-direction: column;
@@ -297,16 +413,19 @@ footer {
     grid-template-columns: 1fr; /* Stack vertically */
   }
 
-  .image-placeholder {
-    position: static; /* No longer hanging */
+  .hero-image {
     width: 100%;
-    height: 300px;
-    margin-top: 20px;
   }
 
   .cards-grid,
-  .footer-container {
+  .footer-container,
+  .about-container {
     grid-template-columns: 1fr; /* Stack vertically */
+  }
+
+  /* FIX FOR MOBILE TESTIMONIALS */
+  .testimonials-grid {
+    grid-template-columns: 1fr; /* Force 1 column on mobile */
   }
 
   .hero-text h1 {

@@ -1,4 +1,5 @@
 import logo from "./assets/images/Logo.svg";
+import { Link } from "react-router-dom"; // Optional if using React Router
 
 function Footer() {
   return (
@@ -8,25 +9,25 @@ function Footer() {
           <img src={logo} alt="Little Lemon" />
         </div>
         <div className="footer-column">
-          <h4>Doormat Navigation</h4>
+          <h4>&nbsp;</h4>
           <ul>
             <li>
-              <a href="/">Home</a>
+              <Link to="/">Home</Link>
             </li>
             <li>
-              <a href="/about">About</a>
+              <Link to="/about">About</Link>
             </li>
             <li>
-              <a href="/menu">Menu</a>
+              <Link to="/menu">Menu</Link>
             </li>
             <li>
-              <a href="/reservations">Reservations</a>
+              <Link to="/reservations">Reservations</Link>
             </li>
             <li>
-              <a href="/order-online">Order Online</a>
+              <Link to="/order-online">Order Online</Link>
             </li>
             <li>
-              <a href="/login">Login</a>
+              <Link to="/login">Login</Link>
             </li>
           </ul>
         </div>
