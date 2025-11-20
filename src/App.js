@@ -5,7 +5,7 @@ import Header from "./Header";
 import Nav from "./Nav";
 import Footer from "./Footer";
 import Main from "./Main";
-import Reservations from "./pages/Reservations";
+import BookingPage from "./pages/BookingPage";
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
             </>
           }
         />
-        <Route path="/reservations" element={<Reservations />} />
+        <Route path="/booking" element={<BookingPage />} />
       </Routes>
       <Footer />
     </Fragment>

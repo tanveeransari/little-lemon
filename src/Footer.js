@@ -21,7 +21,7 @@ function Footer() {
               <Link to="/menu">Menu</Link>
             </li>
             <li>
-              <Link to="/reservations">Reservations</Link>
+              <Link to="/booking">Reservations</Link>
             </li>
             <li>
               <Link to="/order-online">Order Online</Link>
