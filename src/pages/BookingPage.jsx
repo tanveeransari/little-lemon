@@ -14,8 +14,10 @@ function BookingPage() {
     }
     return times;
   };
-
-  const [availableTimes, setAvailableTimes] = useState(generateTimes(17, 22, 15));
+  const initializeTimes = () => {
+    return generateTimes(17, 22, 15); // 5:00 PM to 10:00 PM every 15 mins
+  };
+  const [availableTimes, setAvailableTimes] = useState(initializeTimes());
 
   const [sent, setSent] = useState(false);
   const [confirmedData, setConfirmedData] = useState(null);
@@ -29,8 +31,10 @@ function BookingPage() {
       setSent(false);
       setConfirmedData(null);
       resetForm(); // reset only the form fields, not availableTimes
-    }, 3000);
+      document.location.href = "/";
+    }, 5000);
   };
+
   const updateAvailableTimes = (date) => {};
   return (
     <main className="reservations-page">
@@ -65,7 +69,7 @@ function BookingPage() {
                   <strong>Occasion:</strong> {confirmedData.occasion}
                 </p>
               </div>
-              <p className="redirect-message">Redirecting in 3 seconds...</p>
+              <p className="redirect-message">Redirecting in 5 seconds...</p>
             </div>
           ) : (
             <BookingForm

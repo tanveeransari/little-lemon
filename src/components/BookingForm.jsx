@@ -1,4 +1,3 @@
-// src/components/BookingForm.jsx
 import { useState, useEffect } from "react";
 
 function BookingForm({ availableTimes, updateAvailableTimes, onSubmitSuccess }) {
@@ -10,7 +9,7 @@ function BookingForm({ availableTimes, updateAvailableTimes, onSubmitSuccess }) 
     guests: "1",
     date: "",
     time: availableTimes[0] || "", // will be set properly on mount
-    occasion: "Birthday",
+    occasion: "None",
     dietpref: "No Preference",
     seating: "Standard",
     comments: "",
@@ -100,15 +99,24 @@ function BookingForm({ availableTimes, updateAvailableTimes, onSubmitSuccess }) 
         </div>
       </div>
 
-      {/* Contact row – unchanged */}
+      <div className="form-row">
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
+          <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
+        </div>
+        <div className="form-group">
+          <label htmlFor="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} required />
+        </div>
+      </div>
 
       <div className="form-row">
         <div className="form-group">
           <label htmlFor="guests">Number of People *</label>
           <select id="guests" name="guests" value={formData.guests} onChange={handleChange} required>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
-              <option key={n} value={n}>
-                {n}
+            {[...Array(10).keys()].map((n) => (
+              <option key={n + 1} value={n + 1}>
+                {n + 1}
               </option>
             ))}
           </select>
@@ -133,6 +141,7 @@ function BookingForm({ availableTimes, updateAvailableTimes, onSubmitSuccess }) 
         <div className="form-group">
           <label htmlFor="occasion">Occasion</label>
           <select id="occasion" name="occasion" value={formData.occasion} onChange={handleChange}>
+            <option value="None">Birthday</option>
             <option value="Birthday">Birthday</option>
             <option value="Anniversary">Anniversary</option>
             <option value="Engagement">Engagement</option>
@@ -142,7 +151,29 @@ function BookingForm({ availableTimes, updateAvailableTimes, onSubmitSuccess }) 
         </div>
       </div>
 
-      {/* Seating, Dietary, Comments – unchanged */}
+      <div className="form-row">
+        <div className="form-group">
+          <label htmlFor="seating">Seating Preferences</label>
+          <select id="seating" name="seating" value={formData.seating} onChange={handleChange}>
+            <option value="Standard">Standard</option>
+            <option value="Window">Window Seating</option>
+            <option value="Patio">Patio</option>
+            <option value="Bar">Bar</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="dietpref">Dietary Preferences</label>
+          <select id="dietpref" name="dietpref" value={formData.dietpref} onChange={handleChange}>
+            <option value="No Preference">No Preference</option>
+            <option value="Vegetarian">Vegetarian</option>
+            <option value="Vegan">Vegan</option>
+            <option value="Gluten-Free">Gluten-Free</option>
+            <option value="Halal">Halal</option>
+            <option value="Kosher">Kosher</option>
+          </select>
+        </div>
+      </div>
 
       <div className="form-group full-width">
         <label htmlFor="comments">Additional Comments</label>

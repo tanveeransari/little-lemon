@@ -5,18 +5,17 @@ import image1 from "./assets/images/Mario and Adrian A.jpg";
 import image2 from "./assets/images/Mario and Adrian b.jpg";
 import { Link } from "react-router-dom";
 
-function Main() {
+function Body() {
   return (
     <main>
-      {/* Highlights / Specials Section */}
       <section className="highlights">
         <div className="container">
           <div className="highlights-header">
             <h3>This weeks specials!</h3>
             <button>Online Menu</button>
           </div>
+
           <div className="cards-grid">
-            {/* Card 1 */}
             <article className="card">
               <img src={salad} alt="Greek Salad" className="card-img" />
               <div className="card-content">
@@ -32,7 +31,6 @@ function Main() {
               </div>
             </article>
 
-            {/* Card 2 */}
             <article className="card">
               <img src={bruchetta} alt="Bruschetta" className="card-img" />
               <div className="card-content">
@@ -48,7 +46,6 @@ function Main() {
               </div>
             </article>
 
-            {/* Card 3 */}
             <article className="card">
               <img src={lemondessert} alt="Lemon Dessert" className="card-img" />
               <div className="card-content">
@@ -67,7 +64,6 @@ function Main() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
       <section className="testimonials">
         <div className="container">
           <div className="testimonials-header">
@@ -75,7 +71,6 @@ function Main() {
           </div>
 
           <div className="testimonials-grid">
-            {/* Card 1 */}
             <div className="testimonial-card">
               <div className="rating">⭐⭐⭐⭐⭐</div>
               <div className="user-profile">
@@ -89,7 +84,6 @@ function Main() {
               <p className="review-text">"Excellent food preparation and great service"</p>
             </div>
 
-            {/* Card 2 */}
             <div className="testimonial-card">
               <div className="rating">⭐⭐⭐⭐⭐</div>
               <div className="user-profile">
@@ -103,7 +97,6 @@ function Main() {
               <p className="review-text">"I like the bruchetta here more than anywhere else."</p>
             </div>
 
-            {/* Card 3 */}
             <div className="testimonial-card">
               <div className="rating">⭐⭐⭐⭐⭐</div>
               <div className="user-profile">
@@ -117,7 +110,6 @@ function Main() {
               <p className="review-text">"I love the online ordering system. So easy to use!"</p>
             </div>
 
-            {/* Card 4 */}
             <div className="testimonial-card">
               <div className="rating">⭐⭐⭐⭐⭐</div>
               <div className="user-profile">
@@ -134,7 +126,6 @@ function Main() {
         </div>
       </section>
 
-      {/* About Section */}
       <section className="about">
         <div className="container about-container">
           <div className="about-text">
@@ -160,4 +151,4 @@ function Main() {
     </main>
   );
 }
-export default Main;
+export default Body;
