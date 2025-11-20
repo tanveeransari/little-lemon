@@ -3,7 +3,7 @@ import bruchetta from "./assets/images/bruchetta.svg";
 import lemondessert from "./assets/images/lemon dessert.jpg";
 import image1 from "./assets/images/Mario and Adrian A.jpg";
 import image2 from "./assets/images/Mario and Adrian b.jpg";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Main() {
   return (
@@ -28,7 +28,7 @@ function Main() {
                   The famous greek salad of crispy lettuce, peppers, olives and our Chicago style feta cheese, garnished
                   with crunchy garlic and rosemary croutons.
                 </p>
-                <a href="/order">Order a delivery 🚗</a>
+                <Link to="/order">Order a delivery 🚗</Link>
               </div>
             </article>
 
@@ -44,7 +44,7 @@ function Main() {
                   Our Bruschetta is made from grilled bread that has been smeared with garlic and seasoned with salt and
                   olive oil.
                 </p>
-                <a href="/order">Order a delivery 🚗</a>
+                <Link to="/order">Order a delivery 🚗</Link>
               </div>
             </article>
 
@@ -60,7 +60,7 @@ function Main() {
                   This comes straight from grandma's recipe book, every last ingredient has been sourced and is as
                   authentic as can be imagined.
                 </p>
-                <a href="/order">Order a delivery 🚗</a>
+                <Link to="/order">Order a delivery 🚗</Link>
               </div>
             </article>
           </div>

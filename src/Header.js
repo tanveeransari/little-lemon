@@ -1,6 +1,6 @@
 import hero from "./assets/images/restauranfood.jpg";
 import burger from "./assets/images/🦆 icon _hamburger menu.svg";
-import { Link } from "react-router-dom"; // Optional if using React Router
+import { Link } from "react-router-dom"; // using Link for reservations
 
 const Header = () => {
   return (
@@ -12,13 +12,12 @@ const Header = () => {
           <p>
             We are a family owned Mediterranean restaurant, focused on traditional recipes served with a modern twist.
           </p>
-          <button aria-label="Reserve a Table">Reserve a Table</button>
+          <Link to="/reservations">
+            <button aria-label="Reserve a Table">Reserve a Table</button>
+          </Link>
         </div>
         <div className="hero-image">
           <img src={hero} alt="Restaurant Food" className="hero-img" />
-          {/* <Link to="/reservations"> */}
-
-          {/* </Link> */}
         </div>
       </div>
     </header>
