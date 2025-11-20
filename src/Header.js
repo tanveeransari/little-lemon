@@ -1,5 +1,4 @@
 import hero from "./assets/images/restauranfood.jpg";
-import burger from "./assets/images/🦆 icon _hamburger menu.svg";
 import { Link } from "react-router-dom"; // using Link for reservations
 
 const Header = () => {
