@@ -1,24 +1,7 @@
 import { useState } from "react";
 import BookingForm from "../components/BookingForm"; // adjust path as needed
 
-function BookingPage() {
-  const generateTimes = (startHour, endHour, stepMinutes) => {
-    const times = [];
-    for (let h = startHour; h <= endHour; h++) {
-      for (let m = 0; m < 60; m += stepMinutes) {
-        if (h === endHour && m > 0) break; // stop before 22:15, 22:30 etc.
-        const hh = String(h).padStart(2, "0");
-        const mm = String(m).padStart(2, "0");
-        times.push(`${hh}:${mm}`);
-      }
-    }
-    return times;
-  };
-  const initializeTimes = () => {
-    return generateTimes(17, 22, 15); // 5:00 PM to 10:00 PM every 15 mins
-  };
-  const [availableTimes, setAvailableTimes] = useState(initializeTimes());
-
+function BookingPage({ availableTimes, setAvailableTimes }) {
   const [sent, setSent] = useState(false);
   const [confirmedData, setConfirmedData] = useState(null);
 
@@ -35,7 +18,24 @@ function BookingPage() {
     }, 5000);
   };
 
-  const updateAvailableTimes = (date) => {};
+  const updateAvailableTimes = (date) => {
+    if (typeof setAvailableTimes === "function" && typeof date === "string") {
+      // Simulate fetching availability for the selected date
+      const slot = date ? [...date].reduce((s, ch) => s + ch.charCodeAt(0), 0) : 0;
+      const modulus = (slot % 3) + 2;
+      const times = [];
+      for (let h = 17; h <= 22; h++) {
+        for (let m = 0; m < 60; m += 15) {
+          if (h === 22 && m > 0) break;
+          const hh = String(h).padStart(2, "0");
+          const mm = String(m).padStart(2, "0");
+          times.push(`${hh}:${mm}`);
+        }
+      }
+      const filtered = times.filter((_, idx) => idx % modulus !== slot % modulus);
+      setAvailableTimes(filtered.length ? filtered : times.slice(0, 4));
+    }
+  };
   return (
     <main className="reservations-page">
       <div className="container">

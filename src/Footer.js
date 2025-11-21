@@ -35,7 +35,7 @@ function Footer() {
           <h4>Contact</h4>
           <ul>
             <li>2548 Maldove Way, Chicago IL</li>
-            <li>(629)-243-6827</li>
+            <li>(312)-191-8227</li>
             <li>info@littlelemon.com</li>
           </ul>
         </div>
