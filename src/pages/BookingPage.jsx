@@ -1,7 +1,7 @@
 import { useState } from "react";
 import BookingForm from "../components/BookingForm"; // adjust path as needed
 
-function BookingPage({ availableTimes, dispatch }) {
+function BookingPage({ availableTimes, setAvailableTimes }) {
   const [sent, setSent] = useState(false);
   const [confirmedData, setConfirmedData] = useState(null);
 
@@ -19,8 +19,21 @@ function BookingPage({ availableTimes, dispatch }) {
   };
 
   const updateAvailableTimes = (date) => {
-    if (typeof date === "string") {
-      dispatch({ type: "UPDATE_BY_DATE", payload: date });
+    if (typeof setAvailableTimes === "function" && typeof date === "string") {
+      // Simulate fetching availability for the selected date
+      const slot = date ? [...date].reduce((s, ch) => s + ch.charCodeAt(0), 0) : 0;
+      const modulus = (slot % 3) + 2;
+      const times = [];
+      for (let h = 17; h <= 22; h++) {
+        for (let m = 0; m < 60; m += 15) {
+          if (h === 22 && m > 0) break;
+          const hh = String(h).padStart(2, "0");
+          const mm = String(m).padStart(2, "0");
+          times.push(`${hh}:${mm}`);
+        }
+      }
+      const filtered = times.filter((_, idx) => idx % modulus !== slot % modulus);
+      setAvailableTimes(filtered.length ? filtered : times.slice(0, 4));
     }
   };
   return (
