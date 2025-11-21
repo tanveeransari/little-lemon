@@ -79,8 +79,6 @@ function BookingForm({ availableTimes, updateAvailableTimes, onSubmitSuccess }) 
 
   return (
     <form className="reservation-form" onSubmit={handleSubmit}>
-      {/* All your existing form rows – only changes are using props/state from above */}
-
       <div className="form-row">
         <div className="form-group">
           <label htmlFor="firstName">First Name *</label>
