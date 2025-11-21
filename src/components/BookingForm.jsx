@@ -141,7 +141,7 @@ function BookingForm({ availableTimes, updateAvailableTimes, onSubmitSuccess }) 
         <div className="form-group">
           <label htmlFor="occasion">Occasion</label>
           <select id="occasion" name="occasion" value={formData.occasion} onChange={handleChange}>
-            <option value="None">Birthday</option>
+            <option value="None">None</option>
             <option value="Birthday">Birthday</option>
             <option value="Anniversary">Anniversary</option>
             <option value="Engagement">Engagement</option>
