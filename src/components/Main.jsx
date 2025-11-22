@@ -1,19 +1,17 @@
 import { useReducer, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Header from "../Header";
 import Nav from "../Nav";
 import Footer from "../Footer";
 import Body from "../Body";
 import BookingPage from "../pages/BookingPage";
+import ConfirmedBooking from "../pages/ConfirmedBooking";
 import { initializeTimes, updateTimes as reducerUpdateTimes } from "../utils/timeUtils";
 
 function Main() {
-  // Use an explicit date for initialization so behavior is deterministic
   const today = new Date();
   const [availableTimes, dispatch] = useReducer(reducerUpdateTimes, initializeTimes(today));
 
-  // Handler to update times for a given date. Prefers the global `fetchAPI` when available,
-  // otherwise falls back to the reducer's deterministic filtering logic.
   const updateTimes = (date) => {
     const dateObj = date instanceof Date ? date : typeof date === "string" ? new Date(date) : null;
     if (!dateObj) return;
@@ -33,10 +31,25 @@ function Main() {
     dispatch({ type: "UPDATE_BY_DATE", payload: dateObj });
   };
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     updateTimes(today);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const submitForm = async (formData) => {
+    try {
+      if (typeof window !== "undefined" && typeof window.submitAPI === "function") {
+        const result = await Promise.resolve(window.submitAPI(formData));
+        return result === true;
+      }
+      return true;
+    } catch (e) {
+      console.warn("submitAPI failed", e);
+      return false;
+    }
+  };
 
   return (
     <>
@@ -53,8 +66,16 @@ function Main() {
         />
         <Route
           path="/booking"
-          element={<BookingPage availableTimes={availableTimes} updateAvailableTimes={updateTimes} />}
+          element={
+            <BookingPage
+              availableTimes={availableTimes}
+              updateAvailableTimes={updateTimes}
+              submitForm={submitForm}
+              navigate={navigate}
+            />
+          }
         />
+        <Route path="/confirmed" element={<ConfirmedBooking />} />
       </Routes>
       <Footer />
     </>

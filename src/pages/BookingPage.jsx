@@ -1,21 +1,32 @@
-import { useState } from "react";
 import BookingForm from "../components/BookingForm"; // adjust path as needed
+import { useState } from "react";
 
-function BookingPage({ availableTimes, updateAvailableTimes }) {
-  const [sent, setSent] = useState(false);
-  const [confirmedData, setConfirmedData] = useState(null);
+function BookingPage({ availableTimes, updateAvailableTimes, submitForm, navigate }) {
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSuccess = (data, resetForm) => {
-    console.log("Reservation submitted:", data);
-    setConfirmedData(data);
-    setSent(true);
-
-    setTimeout(() => {
-      setSent(false);
-      setConfirmedData(null);
-      resetForm(); // reset only the form fields, not availableTimes
-      document.location.href = "/";
-    }, 5000);
+  const handleSuccess = async (data, resetForm) => {
+    console.log("Reservation submitted (attempting API submit):", data);
+    setError(null);
+    setSubmitting(true);
+    try {
+      const result = await Promise.resolve(submitForm ? submitForm(data) : true);
+      setSubmitting(false);
+      if (result === true) {
+        resetForm && resetForm();
+        if (typeof navigate === "function") {
+          navigate("/confirmed", { state: data });
+        } else if (typeof window !== "undefined") {
+          window.location.href = "/confirmed";
+        }
+      } else {
+        setError("Failed to submit reservation. Please try again.");
+      }
+    } catch (e) {
+      console.error("Error submitting reservation:", e);
+      setSubmitting(false);
+      setError("An error occurred when submitting the reservation. Please try again.");
+    }
   };
 
   return (
@@ -24,54 +35,20 @@ function BookingPage({ availableTimes, updateAvailableTimes }) {
         <section className="reservations-section">
           <h1>Reserve a table</h1>
 
-          {sent && confirmedData ? (
-            <div className="success-message">
-              <h2>✓ Reservation Confirmed!</h2>
-              <p>Thank you for your reservation at Little Lemon.</p>
-              <div className="confirmation-details">
-                <p>
-                  <strong>Name:</strong> {confirmedData.firstName} {confirmedData.lastName}
-                </p>
-                <p>
-                  <strong>Email:</strong> {confirmedData.email}
-                </p>
-                <p>
-                  <strong>Phone:</strong> {confirmedData.phone}
-                </p>
-                <p>
-                  <strong>Date:</strong> {confirmedData.date}
-                </p>
-                <p>
-                  <strong>Time:</strong> {formatTwelveHour(confirmedData.time)}
-                </p>
-                <p>
-                  <strong>Guests:</strong> {confirmedData.guests}
-                </p>
-                <p>
-                  <strong>Occasion:</strong> {confirmedData.occasion}
-                </p>
-              </div>
-              <p className="redirect-message">Redirecting in 5 seconds...</p>
-            </div>
-          ) : (
-            <BookingForm
-              availableTimes={availableTimes}
-              updateAvailableTimes={updateAvailableTimes} // optional now, required later
-              onSubmitSuccess={handleSuccess}
-            />
+          <BookingForm
+            availableTimes={availableTimes}
+            updateAvailableTimes={updateAvailableTimes} // optional now, required later
+            onSubmitSuccess={handleSuccess}
+            submitting={submitting}
+          />
+          {error && (
+            <p className="error-message" style={{ color: "red", marginTop: "1rem" }}>
+              {error}
+            </p>
           )}
         </section>
       </div>
     </main>
   );
 }
-// Helper for nice 12-hour display in confirmation
-const formatTwelveHour = (time24) => {
-  const [h, m] = time24.split(":");
-  const hour = parseInt(h);
-  const ampm = hour >= 12 ? "PM" : "AM";
-  const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
-  return `${displayHour}:${m} ${ampm}`;
-};
-
 export default BookingPage;

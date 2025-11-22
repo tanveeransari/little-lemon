@@ -24,7 +24,7 @@ export const initializeTimes = (date = new Date()) => {
   }
 
   //Fallback for Tests
-  return generateTimes();
+  return generateTimes(17, 22, 15); // 5 PM to 10 PM every 15 mins
 };
 
 export const updateTimes = (state, action) => {
@@ -50,10 +50,15 @@ export const updateTimes = (state, action) => {
         } catch (e) {
           console.warn("2) fetchAPI not available, falling back to default time generation.");
         }
-        // Fallback for tests
-        return generateTimes();
+        // Fallback deterministic filtering (previous behavior)
+        const slot = [...dateObj.toISOString()].reduce((s, ch) => s + ch.charCodeAt(0), 0);
+        const modulus = (slot % 3) + 2;
+        const times = generateTimes(17, 22, 15);
+        const filtered = times.filter((_, idx) => idx % modulus !== slot % modulus);
+        return filtered.length ? filtered : times.slice(0, 4);
       }
-      break;
+      // If payload couldn't be parsed to a Date, return the current state unchanged
+      return state;
     default:
       return state;
   }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function BookingForm({ availableTimes, updateAvailableTimes, onSubmitSuccess }) {
+function BookingForm({ availableTimes, updateAvailableTimes, onSubmitSuccess, submitting = false }) {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -15,7 +15,6 @@ function BookingForm({ availableTimes, updateAvailableTimes, onSubmitSuccess }) 
     comments: "",
   });
 
-  // Sync default time when availableTimes change (e.g. date changes later)
   useEffect(() => {
     if (availableTimes.length > 0 && !availableTimes.includes(formData.time)) {
       setFormData((prev) => ({ ...prev, time: availableTimes[0] }));
@@ -27,7 +26,6 @@ function BookingForm({ availableTimes, updateAvailableTimes, onSubmitSuccess }) 
 
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // When date changes → trigger parent to possibly update times
     if (name === "date" && updateAvailableTimes) {
       updateAvailableTimes(value);
     }
@@ -189,8 +187,8 @@ function BookingForm({ availableTimes, updateAvailableTimes, onSubmitSuccess }) 
         Note: You cannot edit your reservation after submission. Please double-check everything.
       </p>
 
-      <button type="submit" className="btn-submit">
-        Book Table
+      <button type="submit" className="btn-submit" disabled={submitting}>
+        {submitting ? "Submitting..." : "Book Table"}
       </button>
     </form>
   );
