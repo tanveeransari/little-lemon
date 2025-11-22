@@ -11,19 +11,50 @@ export const generateTimes = (startHour, endHour, stepMinutes) => {
   return times;
 };
 
-export const initializeTimes = () => {
-  return generateTimes(17, 22, 15); // 5 PM to 10 PM every 15 mins
+export const initializeTimes = (date = new Date()) => {
+  if (typeof window !== "undefined" && typeof window.fetchAPI === "function") {
+    try {
+      const apiTimes = window.fetchAPI(date instanceof Date ? date : new Date(date));
+      if (Array.isArray(apiTimes) && apiTimes.length > 0) {
+        return apiTimes;
+      }
+    } catch (e) {
+      console.warn("fetchAPI failed, falling back to generator");
+    }
+  }
+
+  //Fallback for Tests
+  return generateTimes();
 };
 
 export const updateTimes = (state, action) => {
-  if (action.type === "UPDATE_BY_DATE" && typeof action.payload === "string") {
-    // Simulate fetching availability for the selected date
-    const date = action.payload;
-    const slot = date ? [...date].reduce((s, ch) => s + ch.charCodeAt(0), 0) : 0;
-    const modulus = (slot % 3) + 2;
-    const times = generateTimes(17, 22, 15);
-    const filtered = times.filter((_, idx) => idx % modulus !== slot % modulus);
-    return filtered.length ? filtered : times.slice(0, 4);
+  switch (action.type) {
+    case "SET_TIMES": {
+      console.log("SET_TIMES action payload:", action.payload);
+      return action.payload;
+    }
+
+    case "UPDATE_BY_DATE":
+      const payload = action.payload;
+      const dateObj = payload instanceof Date ? payload : typeof payload === "string" ? new Date(payload) : null;
+      console.log("UPDATE_BY_DATE action for date:", dateObj);
+      if (dateObj) {
+        try {
+          if (typeof window !== "undefined" && typeof window.fetchAPI === "function") {
+            const timesFromApi = window.fetchAPI(dateObj);
+            if (Array.isArray(timesFromApi) && timesFromApi.length > 0) {
+              console.log("Using fetchAPI times:", timesFromApi);
+              return timesFromApi;
+            }
+          }
+        } catch (e) {
+          console.warn("2) fetchAPI not available, falling back to default time generation.");
+        }
+        // Fallback for tests
+        return generateTimes();
+      }
+      break;
+    default:
+      return state;
   }
-  return state;
 };
