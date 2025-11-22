@@ -41,11 +41,7 @@ function BookingPage({ availableTimes, updateAvailableTimes, submitForm, navigat
             onSubmitSuccess={handleSuccess}
             submitting={submitting}
           />
-          {error && (
-            <p className="error-message" style={{ color: "red", marginTop: "1rem" }}>
-              {error}
-            </p>
-          )}
+          {error && <p className="error-message">{error}</p>}
         </section>
       </div>
     </main>

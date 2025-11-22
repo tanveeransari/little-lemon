@@ -603,3 +603,10 @@ footer {
     gap: 20px;
   }
 }
+
+/* Error message styling for form and page errors */
+.error-message {
+  color: #b00020; /* slightly muted red */
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+}

@@ -14,6 +14,7 @@ function BookingForm({ availableTimes, updateAvailableTimes, onSubmitSuccess, su
     seating: "Standard",
     comments: "",
   });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (availableTimes.length > 0 && !availableTimes.includes(formData.time)) {
@@ -25,6 +26,14 @@ function BookingForm({ availableTimes, updateAvailableTimes, onSubmitSuccess, su
     const { name, value } = e.target;
 
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear any existing error for this field when the user changes it
+    if (errors && errors[name]) {
+      setErrors((prev) => {
+        const copy = { ...prev };
+        delete copy[name];
+        return copy;
+      });
+    }
 
     if (name === "date" && updateAvailableTimes) {
       updateAvailableTimes(value);
@@ -34,20 +43,34 @@ function BookingForm({ availableTimes, updateAvailableTimes, onSubmitSuccess, su
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (
-      !formData.firstName ||
-      !formData.lastName ||
-      !formData.email ||
-      !formData.phone ||
-      !formData.date ||
-      !formData.time
-    ) {
-      alert("Please fill in all required fields");
-      return;
+    const newErrors = {};
+
+    // Required fields validation
+    if (!formData.firstName) newErrors.firstName = "First name is required";
+    if (!formData.lastName) newErrors.lastName = "Last name is required";
+    if (!formData.email) newErrors.email = "Email is required";
+    if (!formData.phone) newErrors.phone = "Phone number is required";
+    if (!formData.date) newErrors.date = "Please select a date";
+    if (!formData.time) newErrors.time = "Please select a time";
+
+    // Validate date/time not in the past (only if date/time provided)
+    if (formData.date && formData.time) {
+      const [hour, minute] = formData.time.split(":");
+      const selected = new Date(formData.date);
+      selected.setHours(parseInt(hour, 10), parseInt(minute, 10), 0, 0);
+      const now = new Date();
+      if (selected < now) {
+        newErrors.time = "Selected date and time are in the past. Please choose a future time.";
+      }
     }
 
-    if (!availableTimes.includes(formData.time)) {
-      alert("Selected time is no longer available. Please choose another.");
+    // Availability validation
+    if (formData.time && !availableTimes.includes(formData.time)) {
+      newErrors.time = "Selected time is no longer available. Please choose another.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
 
@@ -62,6 +85,7 @@ function BookingForm({ availableTimes, updateAvailableTimes, onSubmitSuccess, su
         time: availableTimes[0] || "",
         comments: "",
       }));
+      setErrors({});
     };
 
     onSubmitSuccess(formData, resetForm);
@@ -76,7 +100,8 @@ function BookingForm({ availableTimes, updateAvailableTimes, onSubmitSuccess, su
   };
 
   return (
-    <form className="reservation-form" onSubmit={handleSubmit}>
+    <form className="reservation-form" onSubmit={handleSubmit} aria-label="Table Reservation Form">
+      {/* Form-level errors removed; using per-field errors below */}
       <div className="form-row">
         <div className="form-group">
           <label htmlFor="firstName">First Name *</label>
@@ -86,30 +111,86 @@ function BookingForm({ availableTimes, updateAvailableTimes, onSubmitSuccess, su
             name="firstName"
             value={formData.firstName}
             onChange={handleChange}
-            required
+            aria-required="true"
+            aria-invalid={!!errors.firstName}
+            aria-describedby={errors.firstName ? "firstName-error" : undefined}
           />
+          {errors.firstName && (
+            <div id="firstName-error" className="error-message" role="alert" aria-live="assertive">
+              {errors.firstName}
+            </div>
+          )}
         </div>
         <div className="form-group">
           <label htmlFor="lastName">Last Name *</label>
-          <input type="text" id="lastName" name="lastName" value={formData.lastName} onChange={handleChange} required />
+          <input
+            type="text"
+            id="lastName"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+            aria-required="true"
+            aria-invalid={!!errors.lastName}
+            aria-describedby={errors.lastName ? "lastName-error" : undefined}
+          />
+          {errors.lastName && (
+            <div id="lastName-error" className="error-message" role="alert" aria-live="assertive">
+              {errors.lastName}
+            </div>
+          )}
         </div>
       </div>
 
       <div className="form-row">
         <div className="form-group">
           <label htmlFor="email">Email</label>
-          <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            aria-required="true"
+            aria-invalid={!!errors.email}
+            aria-describedby={errors.email ? "email-error" : undefined}
+          />
+          {errors.email && (
+            <div id="email-error" className="error-message" role="alert" aria-live="assertive">
+              {errors.email}
+            </div>
+          )}
         </div>
         <div className="form-group">
           <label htmlFor="phone">Phone Number</label>
-          <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} required />
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            aria-required="true"
+            aria-invalid={!!errors.phone}
+            aria-describedby={errors.phone ? "phone-error" : undefined}
+          />
+          {errors.phone && (
+            <div id="phone-error" className="error-message" role="alert" aria-live="assertive">
+              {errors.phone}
+            </div>
+          )}
         </div>
       </div>
 
       <div className="form-row">
         <div className="form-group">
           <label htmlFor="guests">Number of People *</label>
-          <select id="guests" name="guests" value={formData.guests} onChange={handleChange} required>
+          <select
+            id="guests"
+            name="guests"
+            value={formData.guests}
+            onChange={handleChange}
+            aria-required="true"
+            aria-invalid={!!errors.guests}
+            aria-describedby={errors.guests ? "guests-error" : undefined}>
             {[...Array(10).keys()].map((n) => (
               <option key={n + 1} value={n + 1}>
                 {n + 1}
@@ -119,20 +200,47 @@ function BookingForm({ availableTimes, updateAvailableTimes, onSubmitSuccess, su
         </div>
         <div className="form-group">
           <label htmlFor="date">Select Date *</label>
-          <input type="date" id="date" name="date" value={formData.date} onChange={handleChange} required />
+          <input
+            type="date"
+            id="date"
+            name="date"
+            min={new Date().toISOString().split("T")[0]}
+            value={formData.date}
+            onChange={handleChange}
+            aria-required="true"
+            aria-invalid={!!errors.date}
+            aria-describedby={errors.date ? "date-error" : undefined}
+          />
+          {errors.date && (
+            <div id="date-error" className="error-message" role="alert" aria-live="assertive">
+              {errors.date}
+            </div>
+          )}
         </div>
       </div>
 
       <div className="form-row">
         <div className="form-group">
           <label htmlFor="time">Select Time *</label>
-          <select id="time" name="time" value={formData.time} onChange={handleChange} required>
+          <select
+            id="time"
+            name="time"
+            value={formData.time}
+            onChange={handleChange}
+            aria-required="true"
+            aria-invalid={!!errors.time}
+            aria-describedby={errors.time ? "time-error" : undefined}>
             {availableTimes.map((slot) => (
               <option key={slot} value={slot}>
                 {formatDisplayTime(slot)}
               </option>
             ))}
           </select>
+          {errors.time && (
+            <div id="time-error" className="error-message" role="alert" aria-live="assertive">
+              {errors.time}
+            </div>
+          )}
         </div>
         <div className="form-group">
           <label htmlFor="occasion">Occasion</label>
@@ -180,14 +288,25 @@ function BookingForm({ availableTimes, updateAvailableTimes, onSubmitSuccess, su
           onChange={handleChange}
           rows="4"
           placeholder="Let us know about any dietary restrictions, special occasions, or preferences"
+          aria-describedby={errors.comments ? "comments-error" : undefined}
+          aria-invalid={!!errors.comments}
         />
+        {errors.comments && (
+          <div id="comments-error" className="error-message" role="alert" aria-live="assertive">
+            {errors.comments}
+          </div>
+        )}
       </div>
 
       <p className="disclaimer">
         Note: You cannot edit your reservation after submission. Please double-check everything.
       </p>
 
-      <button type="submit" className="btn-submit" disabled={submitting}>
+      <button
+        type="submit"
+        className="btn-submit"
+        disabled={submitting}
+        aria-label={submitting ? "Submitting reservation" : "Book Table now"}>
         {submitting ? "Submitting..." : "Book Table"}
       </button>
     </form>
